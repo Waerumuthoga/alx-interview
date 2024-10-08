@@ -1,24 +1,21 @@
 #!/usr/bin/python3
-"""You have n number of locked boxes in front of you. Each box is numbered
-sequentially from 0 to n - 1 and each box may contain keys to the
-other boxes."""
+''' Module for lockboxes task.
+'''
 
 
 def canUnlockAll(boxes):
-    """method that determines if all the boxes can be opened."""
-    n = len(boxes)
-    keys = boxes[0]
-    unlocked = [False] * n
-    unlocked[0] = True
-
-    while True:
-        added_keys = False
-        for key in keys:
-            if not unlocked[key]:
-                unlocked[key] = True
-                keys += boxes[key]
-                added_keys = True
-        if not added_keys:
-            break
-
-    return all(unlocked)
+    '''Function that checks if all boxes
+    in list of boxes can be unlocked
+    given the first box is unlocked.
+    '''
+    l = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        box = unseen_boxes.pop()
+        if not box or box >= l or box < 0:
+            continue
+        if box not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[box])
+            seen_boxes.add(box)
+    return l == len(seen_boxes)
